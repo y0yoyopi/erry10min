@@ -14,7 +14,7 @@ def lambda_handler(event, context):
     
     # Obtener host y password de admin
     host = ssm.get_parameter(Name='/rds_mysql_alumnos/punto_enlace', WithDecryption=True)['Parameter']['Value']
-    admin_pass = ssm.get_parameter(Name='/rds_mysql_alumnos/admin/password', WithDecryption=True)['Parameter']['Value']
+    admin_pass = ssm.get_parameter(Name='/rds_mysql_alumnos/admin_password', WithDecryption=True)['Parameter']['Value']
     admin_user = 'admin'
     
     # Conexión como admin
