@@ -1,0 +1,43 @@
+org: aaronrojas
+service: api-alumnos-rds
+
+provider:
+  name: aws
+  runtime: python3.13
+  memorySize: 1024
+  timeout: 20
+  iam:
+    role: arn:aws:iam::429960844715:role/LabRole
+  environment:
+    DB_HOST: /rds_mysql_alumnos/punto_enlace
+    DB_USER: user_${sls:stage}
+    DB_PASSWORD: /rds_mysql_alumnos/user_${sls:stage}/password
+    DB_NAME: ${sls:stage}
+
+plugins:
+  - serverless-python-requirements
+
+custom:
+  pythonRequirements:
+    dockerizePip: true
+    layer: false
+    zip: true
+
+functions:
+  listar:
+    handler: ListarAlumnos.lambda_handler
+    package:
+      include:
+        - ListarAlumnos.py
+    events:
+      - http:
+          path: /alumnos/listar
+          method: get
+          cors: true
+
+  rotarsecretos:
+    handler: RotarSecretos.lambda_handler
+    package:
+      include:
+        - RotarSecretos.py
+
